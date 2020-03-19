@@ -12,13 +12,15 @@ where Aggregate: PersistentAggregate {
 
     // Concealed
 
-    init() {
+    init(resourceCoder: PersistentStorageResourceCoder) {
         _nameMapping = .init()
         _objectMapping = .init()
+        _resourceCoder = resourceCoder
     }
 
     var _nameMapping: [PartialKeyPath<Aggregate>: String]
     var _objectMapping: [String: _PersistentPrimitiveObject]
+    let _resourceCoder: PersistentStorageResourceCoder
 }
 
 // Topic: Main
@@ -32,7 +34,7 @@ extension PersistentMapping {
         guard
             let primitiveName = _nameMapping[keyPath],
             let primitiveObject = _objectMapping[primitiveName],
-            let primitive = Member(_primitiveObject: primitiveObject)
+            let primitive = Member(_primitiveObject: primitiveObject, resourceCoder: _resourceCoder)
         else {
             return nil
         }
@@ -44,7 +46,7 @@ extension PersistentMapping {
         guard
             let primitiveName = _nameMapping[keyPath],
             let primitiveObject = _objectMapping[primitiveName],
-            let primitive = Member(_primitiveObject: primitiveObject)
+            let primitive = Member(_primitiveObject: primitiveObject, resourceCoder: _resourceCoder)
         else {
             return nil
         }
@@ -56,7 +58,7 @@ extension PersistentMapping {
         guard
             let primitiveName = _nameMapping[keyPath],
             let primitiveObject = _objectMapping[primitiveName],
-            let primitive = Member(_primitiveObject: primitiveObject)
+            let primitive = Member(_primitiveObject: primitiveObject, resourceCoder: _resourceCoder)
         else {
             return nil
         }
@@ -68,7 +70,7 @@ extension PersistentMapping {
         guard
             let primitiveName = _nameMapping[keyPath],
             let primitiveObject = _objectMapping[primitiveName],
-            let primitive = Member(_primitiveObject: primitiveObject)
+            let primitive = Member(_primitiveObject: primitiveObject, resourceCoder: _resourceCoder)
         else {
             return nil
         }

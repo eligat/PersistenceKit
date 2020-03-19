@@ -18,22 +18,22 @@ where Wrapped: PersistentPrimitive {
         Wrapped._primitiveObjectVariant
     }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject) {
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder) {
         if _primitiveObject is NSNull {
             self = .none
-        } else if let wrapped = Wrapped(_primitiveObject: _primitiveObject) {
+        } else if let wrapped = Wrapped(_primitiveObject: _primitiveObject, resourceCoder: resourceCoder) {
             self = .some(wrapped)
         } else {
             return nil
         }
     }
 
-    var _primitiveObject: _PersistentPrimitiveObject {
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPrimitiveObject {
         switch self {
             case .none:
                 return NSNull()
             case .some(let wrapped):
-                return wrapped._primitiveObject
+                return wrapped._getPrimitiveObject(resourceCoder: resourceCoder)
         }
     }
 }

@@ -58,13 +58,19 @@ extension PersistentStorage {
         }
     }
 
-    public func load<Aggregate>(_ aggregateType: Aggregate.Type, for id: Aggregate.Schematic.ID) -> Aggregate?
-    where Aggregate: PersistentAggregate {
+    // inject transfomer
+    public func load<Aggregate>(
+        _ aggregateType: Aggregate.Type,
+        for id: Aggregate.Schematic.ID,
+        resourceCoder: PersistentStorageResourceCoder) -> Aggregate?
+        where Aggregate: PersistentAggregate {
+            
         interactive {
-            guard let aggregateObject = aggregateType._aggregateObjectType.object(in: _object, forPrimaryKey: id._primitiveObject) else {
+            let primaryKey: _PersistentPrimitiveObject = id._getPrimitiveObject(resourceCoder: resourceCoder)
+            guard let aggregateObject = aggregateType._aggregateObjectType.object(in: _object, forPrimaryKey: primaryKey) else {
                 return nil
             }
-            return aggregateType.init(_aggregateObject: aggregateObject)
+            return aggregateType.init(_aggregateObject: aggregateObject, resourceCoder: resourceCoder)
         }
     }
 
@@ -76,7 +82,10 @@ extension PersistentStorage {
                 )
                 as! _PersistentStorageQueryObject
 
-            return .init(_storage: self, _aggregateType: aggregateType, _queryObject: queryObject)
+            return .init(_storage: self,
+                         _resourceCoder: self,
+                         _aggregateType: aggregateType,
+                         _queryObject: queryObject)
         }
     }
 
@@ -89,7 +98,10 @@ extension PersistentStorage {
                 )
                 as! _PersistentStorageQueryObject
 
-            return .init(_storage: self, _aggregateType: aggregateType, _queryObject: queryObject)
+            return .init(_storage: self,
+                         _resourceCoder: self,
+                         _aggregateType: aggregateType,
+                         _queryObject: queryObject)
         }
     }
 
@@ -97,9 +109,9 @@ extension PersistentStorage {
     where Aggregate: PersistentAggregate {
         interactive {
             if Aggregate._hasID {
-                _object.addOrUpdate(aggregate._aggregateObject)
+                _object.addOrUpdate(aggregate._getAggregateObject(resourceCoder: self))
             } else {
-                _object.add(aggregate._aggregateObject)
+                _object.add(aggregate._getAggregateObject(resourceCoder: self))
             }
         }
     }
@@ -110,7 +122,7 @@ extension PersistentStorage {
             guard
                 let aggregateObject = Aggregate._aggregateObjectType.object(
                     in: _object,
-                    forPrimaryKey: id._primitiveObject
+                    forPrimaryKey: id._getPrimitiveObject(resourceCoder: self)
                 )
                 else {
                     return

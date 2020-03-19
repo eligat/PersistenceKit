@@ -14,16 +14,16 @@ extension PersistentAggregate {
         ._object(_aggregateObjectType)
     }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject) {
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder) {
         guard
             let aggregateObject = _primitiveObject as? _PersistentAggregateObject
         else {
             return nil
         }
-        self.init(_aggregateObject: aggregateObject)
+        self.init(_aggregateObject: aggregateObject, resourceCoder: resourceCoder)
     }
 
-    var _primitiveObject: _PersistentPrimitiveObject {
-        _aggregateObject
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder) ->  _PersistentPrimitiveObject {
+        return _getAggregateObject(resourceCoder: resourceCoder)
     }
 }

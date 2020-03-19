@@ -29,7 +29,7 @@ extension PersistentAggregate {
             _aggregateName: schematic.aggregateName,
             _idKeyPath: schematic.idKeyPath
         )
-        schematic.report(to: &inspector)
+        schematic.report(to: &inspector, resourceCoder: nil)
         return inspector.report()
     }
 
@@ -41,12 +41,15 @@ extension PersistentAggregate {
         !(Schematic.ID.self == Never.self || Schematic.ID.self == Never?.self)
     }
 
-    init?(_aggregateObject: _PersistentAggregateObject) {
+    // inject storage to create url
+    init?(_aggregateObject: _PersistentAggregateObject, resourceCoder: PersistentStorageResourceCoder) {
         let schematic = Self.schematic
-        var inspector = PersistentMapping<Self>._InputSchematicInspector(_aggregateObject: _aggregateObject)
-        schematic.report(to: &inspector)
+        var inspector = PersistentMapping<Self>._InputSchematicInspector(
+            _aggregateObject: _aggregateObject,
+            resourceCoder: resourceCoder)
+        schematic.report(to: &inspector, resourceCoder: resourceCoder)
         let persistentPrimitiveMapping = inspector.report()
-        guard let instance = schematic.aggregate(from: persistentPrimitiveMapping) else {
+        guard let instance = schematic.aggregate(from: persistentPrimitiveMapping, resourceCoder: resourceCoder) else {
             return nil
         }
         self = instance
@@ -56,16 +59,17 @@ extension PersistentAggregate {
         self[keyPath: Self.schematic.idKeyPath]
     }
 
-    var _mapping: PersistentMapping<Self> {
-        var inspector = PersistentMapping<Self>._OutputSchematicInspector(_aggregate: self)
-        Self.schematic.report(to: &inspector)
+    func _getMapping(resourceCoder: PersistentStorageResourceCoder) -> PersistentMapping<Self> {
+        var inspector = PersistentMapping<Self>._OutputSchematicInspector(_aggregate: self, resourceCoder: resourceCoder)
+        Self.schematic.report(to: &inspector, resourceCoder: resourceCoder)
         return inspector.report()
     }
 
-    var _aggregateObject: _PersistentAggregateObject {
+    func _getAggregateObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentAggregateObject {
         let persistentAggregateObjectVariant = Self._aggregateObjectVariant
         let persistentAggregateObjectType = persistentAggregateObjectVariant._persistentAggregateObjectType()
-        let persistentAggregateObject = persistentAggregateObjectType.init(value: _mapping._objectMapping)
+        let mapping = _getMapping(resourceCoder: resourceCoder)._objectMapping
+        let persistentAggregateObject = persistentAggregateObjectType.init(value: mapping)
         return persistentAggregateObject
     }
 }

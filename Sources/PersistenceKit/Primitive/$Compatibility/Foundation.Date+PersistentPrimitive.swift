@@ -15,11 +15,11 @@ extension Foundation.Date: PersistentPrimitive {
     
     public typealias Primitive = Self
     
-    public init(primitive: Primitive) {
+    public init(primitive: Primitive, resourceCoder: PersistentStorageResourceCoder) {
         self = primitive
     }
-    
-    public var primitive: Primitive {
+
+    public func getPrimitive(_ resourceCoder: PersistentStorageResourceCoder) -> Primitive {
         self
     }
 }

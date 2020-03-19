@@ -36,10 +36,10 @@ extension PersistentPredicateIsEqualTo: _RawPersistentPredicate {
 
     // Exposed
 
-    var _predicateObject: _PersistentPredicateObject {
+    func _getPredicateObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPredicateObject {
         Foundation.NSComparisonPredicate(
-            leftExpression: some._predicateParameterObject,
-            rightExpression: other._predicateParameterObject,
+            leftExpression: some._getPredicateParameterObject(resourceCoder: resourceCoder),
+            rightExpression: other._getPredicateParameterObject(resourceCoder: resourceCoder),
             modifier: .direct,
             type: .equalTo,
             options: []

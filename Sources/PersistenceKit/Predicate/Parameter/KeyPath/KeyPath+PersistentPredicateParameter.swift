@@ -12,11 +12,12 @@ where Root: PersistentAggregate, Value: PersistentPrimitive {
 
     // Exposed
 
-    var _predicateParameterObject: _PersistentPredicateParameterObject {
+    func _getPredicateParameterObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPredicateParameterObject {
         var inspector = _SchematicInspector(_keyPath: self)
-        Root.schematic.report(to: &inspector)
+        Root.schematic.report(to: &inspector, resourceCoder: resourceCoder)
         return .init(forKeyPath: inspector.report())
     }
+
 }
 
 // Protocol: PersistentPredicateParameter

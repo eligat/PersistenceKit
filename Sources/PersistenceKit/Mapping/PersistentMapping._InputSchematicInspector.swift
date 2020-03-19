@@ -15,9 +15,9 @@ extension PersistentMapping {
 
         // Exposed
 
-        init(_aggregateObject: _PersistentAggregateObject) {
+        init(_aggregateObject: _PersistentAggregateObject, resourceCoder: PersistentStorageResourceCoder) {
             self._aggregateObject = _aggregateObject
-            _report = .init()
+            _report = .init(resourceCoder: resourceCoder)
         }
 
         let _aggregateObject: _PersistentAggregateObject
@@ -38,7 +38,7 @@ extension PersistentMapping._InputSchematicInspector: PersistentAggregateSchemat
 
     typealias Report = PersistentMapping
 
-    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member>, named memberName: String)
+    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member>, named memberName: String, resourceCoder: PersistentStorageResourceCoder)
     where Member: PersistentPrimitive {
         // TODO: Replace literal selector with something better.
         let selector = Selector("_get_\(memberName)")
@@ -49,7 +49,7 @@ extension PersistentMapping._InputSchematicInspector: PersistentAggregateSchemat
         _report._nameMapping[memberKeyPath] = memberName
     }
 
-    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member>, named memberName: String)
+    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member>, named memberName: String, resourceCoder: PersistentStorageResourceCoder)
     where Member: PersistentAggregate {
         // TODO: Replace literal selector with something better.
         let selector = Selector("_get_\(memberName)")
@@ -60,7 +60,7 @@ extension PersistentMapping._InputSchematicInspector: PersistentAggregateSchemat
         _report._nameMapping[memberKeyPath] = memberName
     }
 
-    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member?>, named memberName: String)
+    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member?>, named memberName: String, resourceCoder: PersistentStorageResourceCoder)
     where Member: PersistentAggregate {
         // TODO: Replace literal selector with something better.
         let selector = Selector("_get_\(memberName)")

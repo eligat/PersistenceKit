@@ -13,7 +13,7 @@ extension Foundation.Data: _RawPersistentPredicateParameter {
 
     // Exposed
 
-    var _predicateParameterObject: _PersistentPredicateParameterObject {
-        .init(forConstantValue: _primitiveObject)
+    func _getPredicateParameterObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPredicateParameterObject {
+        .init(forConstantValue: _getPrimitiveObject(resourceCoder: resourceCoder))
     }
 }

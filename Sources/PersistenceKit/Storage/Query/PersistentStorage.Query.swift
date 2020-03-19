@@ -22,13 +22,18 @@ extension PersistentStorage {
 
         // Concealed
 
-        init(_storage storage: PersistentStorage, _aggregateType aggregateType: Aggregate.Type, _queryObject queryObject: _PersistentStorageQueryObject) {
-            _storage = storage
-            _aggregateType = aggregateType
-            _publisher = .init()
-            _ordering = .init()
-            _mapping = .init()
-            _listeningToken = nil
+        init(_storage storage: PersistentStorage,
+             _resourceCoder: PersistentStorageResourceCoder,
+             _aggregateType aggregateType: Aggregate.Type,
+             _queryObject queryObject: _PersistentStorageQueryObject) {
+
+            self._storage = storage
+            self._resourceCoder = _resourceCoder
+            self._aggregateType = aggregateType
+            self._publisher = .init()
+            self._ordering = .init()
+            self._mapping = .init()
+            self._listeningToken = nil
 
             _startListening(_queryObject: queryObject)
         }
@@ -38,6 +43,7 @@ extension PersistentStorage {
         }
 
         var _storage: PersistentStorage
+        let _resourceCoder: PersistentStorageResourceCoder
         let _aggregateType: Aggregate.Type
         let _publisher: Combine.PassthroughSubject<Output, Failure>
         var _ordering: [Aggregate?]
@@ -116,7 +122,7 @@ extension PersistentStorage.Query {
         for index in change.insertions {
             let newObject = query.object(at: index.uintValue)
             let index = index.intValue
-            let newAggregate = Aggregate(_aggregateObject: newObject)
+            let newAggregate = Aggregate(_aggregateObject: newObject, resourceCoder: _resourceCoder)
             _ordering.insert(newAggregate, at: index)
             if Aggregate._hasID {
                 if let newAggregate = newAggregate {
@@ -140,7 +146,7 @@ extension PersistentStorage.Query {
             let newObject = query.object(at: index.uintValue)
             let index = index.intValue
             let oldAggregate = _ordering.indices.contains(index) ? _ordering[index] : nil
-            let newAggregate = Aggregate(_aggregateObject: newObject)
+            let newAggregate = Aggregate(_aggregateObject: newObject, resourceCoder: _resourceCoder)
             _ordering[index] = newAggregate
             _publisher.send(.init(_index: index, _old: oldAggregate, _new: newAggregate))
         }
@@ -150,7 +156,7 @@ extension PersistentStorage.Query {
         _ordering.removeAll(keepingCapacity: true)
         for index in 0 ..< query.count {
             let newObject = query.object(at: index)
-            let newAggregate = Aggregate(_aggregateObject: newObject)
+            let newAggregate = Aggregate(_aggregateObject: newObject, resourceCoder: _resourceCoder)
             _ordering.append(newAggregate)
             let index = _ordering.index(before: _ordering.endIndex)
             if Aggregate._hasID {

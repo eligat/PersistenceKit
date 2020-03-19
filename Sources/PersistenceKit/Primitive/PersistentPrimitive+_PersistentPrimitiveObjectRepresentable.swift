@@ -19,29 +19,29 @@ extension PersistentPrimitive {
         }
     }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject) {
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder) {
         if let instanceType = Self.self as? _PersistentPrimitiveObjectRepresentable.Type {
             guard
-                let instance = instanceType.init(_primitiveObject: _primitiveObject)
+                let instance = instanceType.init(_primitiveObject: _primitiveObject, resourceCoder: resourceCoder)
             else {
                 return nil
             }
             self = instance as! Self
         } else {
             guard
-                let primitive = Primitive(_primitiveObject: _primitiveObject)
+                let primitive = Primitive(_primitiveObject: _primitiveObject, resourceCoder: resourceCoder)
             else {
                 return nil
             }
-            self.init(primitive: primitive)
+            self.init(primitive: primitive, resourceCoder: resourceCoder)
         }
     }
 
-    var _primitiveObject: _PersistentPrimitiveObject {
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPrimitiveObject {
         if let instance = self as? _PersistentPrimitiveObjectRepresentable {
-            return instance._primitiveObject
+            return instance._getPrimitiveObject(resourceCoder: resourceCoder)
         } else {
-            return primitive._primitiveObject
+            return getPrimitive(resourceCoder)._getPrimitiveObject(resourceCoder: resourceCoder)
         }
     }
 }

@@ -11,5 +11,5 @@ protocol _RawPersistentPredicateParameter {
 
     // Exposed
 
-    var _predicateParameterObject: _PersistentPredicateParameterObject { get }
+    func _getPredicateParameterObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPredicateParameterObject
 }

@@ -21,10 +21,10 @@ public protocol PersistentAggregateSchematic {
 
     var idKeyPath: KeyPath<Aggregate, ID> { get }
 
-    func report<Inspector>(to inspector: inout Inspector)
+    func report<Inspector>(to inspector: inout Inspector, resourceCoder: PersistentStorageResourceCoder?)
     where Inspector: PersistentAggregateSchematicInspector, Inspector.Aggregate == Aggregate
 
-    func aggregate(from mapping: Mapping) -> Aggregate?
+    func aggregate(from mapping: Mapping, resourceCoder: PersistentStorageResourceCoder?) -> Aggregate?
 }
 
 extension PersistentAggregateSchematic

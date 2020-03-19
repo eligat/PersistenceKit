@@ -13,11 +13,11 @@ extension Swift.Never: PersistentPrimitive {
     
     public typealias Primitive = Self
     
-    public init(primitive: Primitive) {
+    public init(primitive: Primitive, resourceCoder: PersistentStorageResourceCoder) {
         switch primitive { }
     }
-    
-    public var primitive: Primitive {
+
+    public func getPrimitive(_ resourceCoder: PersistentStorageResourceCoder) -> Primitive {
         switch self { }
     }
 }

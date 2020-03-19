@@ -11,11 +11,11 @@ extension PersistentPredicateParameter {
 
     // Concealed
 
-    var _predicateParameterObject: _PersistentPredicateParameterObject {
+    func _getPredicateParameterObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPredicateParameterObject {
         if let instance = self as? _RawPersistentPredicateParameter {
-            return instance._predicateParameterObject
+            return instance._getPredicateParameterObject(resourceCoder: resourceCoder)
         } else {
-            return parameter._predicateParameterObject
+            return parameter._getPredicateParameterObject(resourceCoder: resourceCoder)
         }
     }
 }
