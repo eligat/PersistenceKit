@@ -3,6 +3,7 @@
 // Licensing information can be found in the `LICENSE` file located in the root directory of this repository.
 //
 
+import Foundation.NSURL
 import class Realm.RLMRealm
 import class Realm.RLMNotificationToken
 import class Realm.RLMResults
@@ -15,8 +16,9 @@ public final class PersistentStorage {
 
     // Concealed
 
-    init(_object object: _Object) {
+    init(_object object: _Object, resourceDirectory: URL) {
         _object = object
+        _resourceDirectory = resourceDirectory
     }
 
     deinit {
@@ -24,6 +26,7 @@ public final class PersistentStorage {
     }
 
     let _object: _Object
+    let _resourceDirectory: URL
 }
 
 // Topic: Main
@@ -36,7 +39,8 @@ extension PersistentStorage {
     where Schematic: PersistentStorageSchematic {
         var inspector = _SchemataicInspector(_storageName: schematic.storageName)
         schematic.report(to: &inspector)
-        self.init(_object: try inspector.report().get())
+        let report = try inspector.report().get()
+        self.init(_object: report.storage, resourceDirectory: report.resourceDirectory)
     }
 
     public func transaction<Success>(_ function: () throws -> Success) throws -> Success {

@@ -36,7 +36,7 @@ extension PersistentStorage._SchemataicInspector: PersistentStorageSchematicInsp
 
     // Exposed
 
-    typealias Report = Result<PersistentStorage._Object, Error>
+    typealias Report = Result<(storage: PersistentStorage._Object, resourceDirectory: URL), Error>
 
     mutating func inspect<Aggregate>(_ aggregateType: Aggregate.Type)
     where Aggregate: PersistentAggregate {
@@ -94,6 +94,8 @@ extension PersistentStorage._SchemataicInspector: PersistentStorageSchematicInsp
         }
         object.autorefresh = true
 
-        return .success(object)
+        let resourceDirectory = storageUrl.appendingPathComponent("Resources")
+
+        return .success((object, resourceDirectory))
     }
 }
