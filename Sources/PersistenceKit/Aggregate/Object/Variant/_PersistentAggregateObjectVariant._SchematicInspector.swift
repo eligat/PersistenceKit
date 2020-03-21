@@ -39,7 +39,7 @@ extension _PersistentAggregateObjectVariant._SchematicInspector: PersistentAggre
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
         where Member: PersistentPrimitive {
             _nameMapping[memberKeyPath] = memberName
             _report._objectVariantMapping[memberName] = Member._primitiveObjectVariant
@@ -48,7 +48,7 @@ extension _PersistentAggregateObjectVariant._SchematicInspector: PersistentAggre
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
         where Member: PersistentAggregate {
             _nameMapping[memberKeyPath] = memberName
             _report._objectVariantMapping[memberName] = Member._primitiveObjectVariant
@@ -57,7 +57,7 @@ extension _PersistentAggregateObjectVariant._SchematicInspector: PersistentAggre
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member?>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
         where Member: PersistentAggregate {
             _nameMapping[memberKeyPath] = memberName
             _report._objectVariantMapping[memberName] = Member._primitiveObjectVariant

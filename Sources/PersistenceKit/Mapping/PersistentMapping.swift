@@ -12,7 +12,7 @@ where Aggregate: PersistentAggregate {
 
     // Concealed
 
-    init(resourceCoder: PersistentStorageResourceCoder) {
+    init(resourceCoder: PersistentStorageResourceCoder?) {
         _nameMapping = .init()
         _objectMapping = .init()
         _resourceCoder = resourceCoder
@@ -20,7 +20,7 @@ where Aggregate: PersistentAggregate {
 
     var _nameMapping: [PartialKeyPath<Aggregate>: String]
     var _objectMapping: [String: _PersistentPrimitiveObject]
-    let _resourceCoder: PersistentStorageResourceCoder
+    let _resourceCoder: PersistentStorageResourceCoder?
 }
 
 // Topic: Main

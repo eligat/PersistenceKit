@@ -17,14 +17,14 @@ extension Swift.UInt32: _PersistentPrimitiveObjectRepresentable {
         ._int
     }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject) {
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder?) {
         guard let realmRawPrimitive = _primitiveObject as? Foundation.NSNumber else {
             return nil
         }
         self.init(exactly: realmRawPrimitive)
     }
 
-    var _primitiveObject: _PersistentPrimitiveObject {
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder?) -> _PersistentPrimitiveObject {
         self as Foundation.NSNumber
     }
 }

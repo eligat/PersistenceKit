@@ -39,7 +39,7 @@ extension KeyPath._SchematicInspector: PersistentAggregateSchematicInspector {
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
         where Member: PersistentPrimitive {
             if memberKeyPath == _keyPath {
                 _report = memberName
@@ -49,7 +49,7 @@ extension KeyPath._SchematicInspector: PersistentAggregateSchematicInspector {
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
         where Member: PersistentAggregate {
             if memberKeyPath == _keyPath {
                 _report = memberName
@@ -59,7 +59,7 @@ extension KeyPath._SchematicInspector: PersistentAggregateSchematicInspector {
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member?>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
         where Member: PersistentAggregate {
             if memberKeyPath == _keyPath {
                 _report = memberName

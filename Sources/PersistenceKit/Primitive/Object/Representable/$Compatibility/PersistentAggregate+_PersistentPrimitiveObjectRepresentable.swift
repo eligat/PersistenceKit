@@ -14,7 +14,7 @@ extension PersistentAggregate {
         ._object(_aggregateObjectType)
     }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder) {
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder?) {
         guard
             let aggregateObject = _primitiveObject as? _PersistentAggregateObject
         else {
@@ -23,7 +23,7 @@ extension PersistentAggregate {
         self.init(_aggregateObject: aggregateObject, resourceCoder: resourceCoder)
     }
 
-    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder) ->  _PersistentPrimitiveObject {
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder?) ->  _PersistentPrimitiveObject {
         return _getAggregateObject(resourceCoder: resourceCoder)
     }
 }

@@ -13,7 +13,7 @@ public protocol PersistentPrimitive {
 
     associatedtype Primitive: PersistentPrimitive
 
-    init?(primitive: Primitive, resourceCoder: PersistentStorageResourceCoder)
+    init?(primitive: Primitive, resourceCoder: PersistentStorageResourceCoder?)
 
-    func getPrimitive(_ resourceCoder: PersistentStorageResourceCoder) -> Primitive
+    func getPrimitive(_ resourceCoder: PersistentStorageResourceCoder?) -> Primitive
 }

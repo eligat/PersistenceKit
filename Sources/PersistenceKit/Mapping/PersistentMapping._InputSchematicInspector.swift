@@ -15,7 +15,7 @@ extension PersistentMapping {
 
         // Exposed
 
-        init(_aggregateObject: _PersistentAggregateObject, resourceCoder: PersistentStorageResourceCoder) {
+        init(_aggregateObject: _PersistentAggregateObject, resourceCoder: PersistentStorageResourceCoder?) {
             self._aggregateObject = _aggregateObject
             _report = .init(resourceCoder: resourceCoder)
         }
@@ -38,37 +38,48 @@ extension PersistentMapping._InputSchematicInspector: PersistentAggregateSchemat
 
     typealias Report = PersistentMapping
 
-    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member>, named memberName: String, resourceCoder: PersistentStorageResourceCoder)
-    where Member: PersistentPrimitive {
-        // TODO: Replace literal selector with something better.
-        let selector = Selector("_get_\(memberName)")
-        guard let primitiveObject = _aggregateObject.perform(selector)?.takeUnretainedValue() as? _PersistentPrimitiveObject else {
-            return
-        }
-        _report._objectMapping[memberName] = primitiveObject
-        _report._nameMapping[memberKeyPath] = memberName
+    mutating func inspect<Member>(
+        _ memberKeyPath: KeyPath<Aggregate, Member>,
+        named memberName: String,
+        resourceCoder: PersistentStorageResourceCoder?)
+        where Member: PersistentPrimitive {
+            // TODO: Replace literal selector with something better.
+            let selector = Selector("_get_\(memberName)")
+            guard let primitiveObject = _aggregateObject.perform(selector)?.takeUnretainedValue() as? _PersistentPrimitiveObject else {
+                return
+            }
+            _report._objectMapping[memberName] = primitiveObject
+            _report._nameMapping[memberKeyPath] = memberName
     }
 
-    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member>, named memberName: String, resourceCoder: PersistentStorageResourceCoder)
-    where Member: PersistentAggregate {
-        // TODO: Replace literal selector with something better.
-        let selector = Selector("_get_\(memberName)")
-        guard let primitiveObject = _aggregateObject.perform(selector)?.takeUnretainedValue() as? _PersistentPrimitiveObject else {
-            return
-        }
-        _report._objectMapping[memberName] = primitiveObject
-        _report._nameMapping[memberKeyPath] = memberName
+    mutating func inspect<Member>(
+        _ memberKeyPath: KeyPath<Aggregate, Member>,
+        named memberName: String,
+        resourceCoder: PersistentStorageResourceCoder?)
+        where Member: PersistentAggregate {
+
+            // TODO: Replace literal selector with something better.
+            let selector = Selector("_get_\(memberName)")
+            guard let primitiveObject = _aggregateObject.perform(selector)?.takeUnretainedValue() as? _PersistentPrimitiveObject else {
+                return
+            }
+            _report._objectMapping[memberName] = primitiveObject
+            _report._nameMapping[memberKeyPath] = memberName
     }
 
-    mutating func inspect<Member>(_ memberKeyPath: KeyPath<Aggregate, Member?>, named memberName: String, resourceCoder: PersistentStorageResourceCoder)
-    where Member: PersistentAggregate {
-        // TODO: Replace literal selector with something better.
-        let selector = Selector("_get_\(memberName)")
-        guard let primitiveObject = _aggregateObject.perform(selector)?.takeUnretainedValue() as? _PersistentPrimitiveObject else {
-            return
-        }
-        _report._objectMapping[memberName] = primitiveObject
-        _report._nameMapping[memberKeyPath] = memberName
+    mutating func inspect<Member>(
+        _ memberKeyPath: KeyPath<Aggregate, Member?>,
+        named memberName: String,
+        resourceCoder: PersistentStorageResourceCoder?)
+        where Member: PersistentAggregate {
+
+            // TODO: Replace literal selector with something better.
+            let selector = Selector("_get_\(memberName)")
+            guard let primitiveObject = _aggregateObject.perform(selector)?.takeUnretainedValue() as? _PersistentPrimitiveObject else {
+                return
+            }
+            _report._objectMapping[memberName] = primitiveObject
+            _report._nameMapping[memberKeyPath] = memberName
     }
 
     func report() -> Report {

@@ -16,15 +16,15 @@ extension Swift.Bool: _PersistentPrimitiveObjectRepresentable {
     static var _primitiveObjectVariant: _PersistentPrimitiveObjectVariant {
         ._bool
     }
-
-    init?(_primitiveObject: _PersistentPrimitiveObject) {
+    
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder?) {
         guard let realmRawPrimitive = _primitiveObject as? Foundation.NSNumber else {
             return nil
         }
         self.init(exactly: realmRawPrimitive)
     }
 
-    var _primitiveObject: _PersistentPrimitiveObject {
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder?) -> _PersistentPrimitiveObject {
         self as Foundation.NSNumber
     }
 }

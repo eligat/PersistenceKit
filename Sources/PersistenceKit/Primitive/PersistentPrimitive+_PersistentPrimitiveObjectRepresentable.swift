@@ -19,7 +19,7 @@ extension PersistentPrimitive {
         }
     }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder) {
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder?) {
         if let instanceType = Self.self as? _PersistentPrimitiveObjectRepresentable.Type {
             guard
                 let instance = instanceType.init(_primitiveObject: _primitiveObject, resourceCoder: resourceCoder)
@@ -37,7 +37,7 @@ extension PersistentPrimitive {
         }
     }
 
-    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPrimitiveObject {
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder?) -> _PersistentPrimitiveObject {
         if let instance = self as? _PersistentPrimitiveObjectRepresentable {
             return instance._getPrimitiveObject(resourceCoder: resourceCoder)
         } else {

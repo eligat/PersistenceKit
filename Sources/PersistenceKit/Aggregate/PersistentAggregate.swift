@@ -42,7 +42,7 @@ extension PersistentAggregate {
     }
 
     // inject storage to create url
-    init?(_aggregateObject: _PersistentAggregateObject, resourceCoder: PersistentStorageResourceCoder) {
+    init?(_aggregateObject: _PersistentAggregateObject, resourceCoder: PersistentStorageResourceCoder?) {
         let schematic = Self.schematic
         var inspector = PersistentMapping<Self>._InputSchematicInspector(
             _aggregateObject: _aggregateObject,
@@ -59,13 +59,13 @@ extension PersistentAggregate {
         self[keyPath: Self.schematic.idKeyPath]
     }
 
-    func _getMapping(resourceCoder: PersistentStorageResourceCoder) -> PersistentMapping<Self> {
+    func _getMapping(resourceCoder: PersistentStorageResourceCoder?) -> PersistentMapping<Self> {
         var inspector = PersistentMapping<Self>._OutputSchematicInspector(_aggregate: self, resourceCoder: resourceCoder)
         Self.schematic.report(to: &inspector, resourceCoder: resourceCoder)
         return inspector.report()
     }
 
-    func _getAggregateObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentAggregateObject {
+    func _getAggregateObject(resourceCoder: PersistentStorageResourceCoder?) -> _PersistentAggregateObject {
         let persistentAggregateObjectVariant = Self._aggregateObjectVariant
         let persistentAggregateObjectType = persistentAggregateObjectVariant._persistentAggregateObjectType()
         let mapping = _getMapping(resourceCoder: resourceCoder)._objectMapping

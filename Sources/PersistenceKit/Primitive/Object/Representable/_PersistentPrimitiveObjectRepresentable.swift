@@ -13,7 +13,7 @@ protocol _PersistentPrimitiveObjectRepresentable {
 
     static var _primitiveObjectVariant: _PersistentPrimitiveObjectVariant { get }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder)
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder?)
 
-    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder) -> _PersistentPrimitiveObject
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder?) -> _PersistentPrimitiveObject
 }

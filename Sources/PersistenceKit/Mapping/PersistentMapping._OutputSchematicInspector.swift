@@ -15,7 +15,7 @@ extension PersistentMapping {
 
         // Exposed
 
-        init(_aggregate: Aggregate, resourceCoder: PersistentStorageResourceCoder) {
+        init(_aggregate: Aggregate, resourceCoder: PersistentStorageResourceCoder?) {
             self._aggregate = _aggregate
             _report = .init(resourceCoder: resourceCoder)
         }
@@ -39,7 +39,7 @@ extension PersistentMapping._OutputSchematicInspector: PersistentAggregateSchema
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
     where Member: PersistentPrimitive {
 
         _report._objectMapping[memberName] =
@@ -50,7 +50,7 @@ extension PersistentMapping._OutputSchematicInspector: PersistentAggregateSchema
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
     where Member: PersistentAggregate {
 
         _report._objectMapping[memberName] = _aggregate[keyPath: memberKeyPath]
@@ -61,7 +61,7 @@ extension PersistentMapping._OutputSchematicInspector: PersistentAggregateSchema
     mutating func inspect<Member>(
         _ memberKeyPath: KeyPath<Aggregate, Member?>,
         named memberName: String,
-        resourceCoder: PersistentStorageResourceCoder)
+        resourceCoder: PersistentStorageResourceCoder?)
     where Member: PersistentAggregate {
 
         _report._objectMapping[memberName] =

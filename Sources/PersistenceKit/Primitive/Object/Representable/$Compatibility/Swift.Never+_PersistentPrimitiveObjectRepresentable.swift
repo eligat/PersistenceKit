@@ -17,11 +17,11 @@ extension Swift.Never: _PersistentPrimitiveObjectRepresentable {
         ._int
     }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject) {
-        return nil
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder?) {
+        nil
     }
 
-    var _primitiveObject: _PersistentPrimitiveObject {
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder?) -> _PersistentPrimitiveObject {
         NSNull()
     }
 }

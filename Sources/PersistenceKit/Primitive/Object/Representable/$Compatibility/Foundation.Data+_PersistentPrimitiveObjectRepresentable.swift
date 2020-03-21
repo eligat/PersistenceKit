@@ -18,14 +18,14 @@ extension Foundation.Data: _PersistentPrimitiveObjectRepresentable {
         ._data
     }
 
-    init?(_primitiveObject: _PersistentPrimitiveObject) {
+    init?(_primitiveObject: _PersistentPrimitiveObject, resourceCoder: PersistentStorageResourceCoder?) {
         guard let realmRawPrimitive = _primitiveObject as? Foundation.NSData else {
             return nil
         }
         self = realmRawPrimitive as Self
     }
 
-    var _primitiveObject: _PersistentPrimitiveObject {
+    func _getPrimitiveObject(resourceCoder: PersistentStorageResourceCoder?) -> _PersistentPrimitiveObject {
         self as Foundation.NSData
     }
 }
